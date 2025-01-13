@@ -12,5 +12,6 @@
     "config.namingRules.snakeCase": "Example: Snake Case naming",
     "config.namingRules.hungarian": "Example: Hungarian notation",
     "config.aiTranslate.aiNaming": "AI Naming",
-    "config.debugMode.desc": "Debug mode"
+    "config.debugMode.desc": "Debug mode",
+    "config.translatePrompt.desc": "Custom translation prompts. You can use the placeholder `<target lang>` to express your target language"
 }

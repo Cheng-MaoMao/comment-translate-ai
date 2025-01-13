@@ -22,6 +22,7 @@ interface TranslateOption {
     largeModelTemperature?: number; // 大模型温度参数
     namingRules?: string; // 命名规则
     debugMode?: boolean; // 调试模式
+    translatePrompt?: string; // 翻译提示词
 }
 
 // AiTranslate 类实现了 ITranslate 接口
@@ -58,7 +59,8 @@ export class AiTranslate implements ITranslate {
             largeModelMaxTokens: getConfig<number>('largeModelMaxTokens'), // 获取大模型最大 token 数的配置
             largeModelTemperature: getConfig<number>('largeModelTemperature'), // 获取大模型温度参数的配置
             namingRules: getConfig<string>('namingRules'), // 获取命名规则的配置
-            debugMode: getConfig<boolean>('debugMode') // 获取调试模式的配置
+            debugMode: getConfig<boolean>('debugMode'), // 获取调试模式的配置
+            translatePrompt: getConfig<string>('translatePrompt') // 获取翻译提示词的配置
         };
         return defaultOption;
     }
@@ -116,12 +118,14 @@ export class AiTranslate implements ITranslate {
                 temperature: this._defaultOption.largeModelTemperature
             })}\n`;
 
+            let customPrompt = this._defaultOption.translatePrompt.replace('<targetLang>', targetLang) + `:\n${content}`;
+
             const data = {
                 model: this._defaultOption.largeModelName,
                 messages: [
                     {
                         role: "user",
-                        content: `Please act as a translator, check if the sentences or words are accurate, translate naturally, smoothly, and idiomatically, use professional computer terminology for accurate translation of comments or functions, no additional unnecessary additions are needed. Translate the following text into ${targetLang}:\n${content}`
+                        content: customPrompt
                     }
                 ],
                 temperature: this._defaultOption.largeModelTemperature || 0.2,
@@ -145,7 +149,7 @@ export class AiTranslate implements ITranslate {
                 messages: [
                     {
                         role: "user",
-                        content: `Please act as a translator, check if the sentences or words are accurate, translate naturally, smoothly, and idiomatically, use professional computer terminology for accurate translation of comments or functions, no additional unnecessary additions are needed. Translate the following text into ${targetLang}:\n${content}`
+                        content: customPrompt
                     }
                 ],
                 contentPreview: content.substring(0, 100) + (content.length > 100 ? '...' : '')

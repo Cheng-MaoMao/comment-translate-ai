@@ -33,14 +33,21 @@
 |  `aiTranslate.largeModelMaxTokens`  |                       最大 token 数（0表示不限制）                       |     2048     |
 | `aiTranslate.largeModelTemperature` | 大模型温度参数<br />(较低的值产生更确定的结果，较高的值产生更多样的结果) |     0.2     |
 |      `aiTranslate.namingRules`      |                                 命名规则                                 | 由AI自行判断 |
+|`aiTranslate.translatePrompt`|自定义翻译提示词<br/>可以使用`<targetLang>`来表示您的目标语言|看配置(一定要填写完整，删除了可以重置)|
 
 ## 🚀 快速开始
 
 1. 配置 API 相关信息，请确保您使用的大模型服务商兼容OpenAI的API调用格式
-   [Open AI官方文档](https://platform.openai.com/docs/api-reference/chat)
+   [Open AI官方文档](https://platform.openai.com/docs/api-reference/chat)。这里是详细解释了什么此类API及如何调用 [沉浸式翻译配置文档](https://immersivetranslate.com/zh-Hans/docs/services/ai/)
    *中国大陆地区推荐使用[DeepSeek](https://platform.deepseek.com/)
    不是广告，因为这个模型效果好而且token便宜推荐一下*
    ![配置](./image/setting.png)
+   *不想花钱也可以使用ollama调用本地大模型，我使用gemma2:2b响应速度和翻译效果都不错*
+   ![ollama配置](./image/ollama-setting.png)
+   Prompt设置
+   ![prompt配置](./image/prompt-setting.png)
+   Prompt效果展示
+   ![prompt效果](./image/prompt-setting-show.png)
 2. 配置完成后，请调用“Comment Translate”中的“Comment Translate:Change translate source”命令
    ![换源](./image/change.png)
 3. 选择翻译源为"AI translate"
@@ -85,6 +92,10 @@
 ### 0.0.6
 
 - 🤖 优化了AI提示词
+
+### 0.0.6-post1
+
+- 🔧 添加自定义prompt设置
 
 ## 🙏 致谢
 

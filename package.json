@@ -93,6 +93,16 @@
           ],
           "default": false,
           "markdownDescription": "%config.debugMode.desc%"
+        },
+        "aiTranslate.translatePrompt": {
+          "type": "string",
+          "default": "Please act as a translator, check if the sentences or words are accurate, translate naturally, smoothly, and idiomatically, use professional computer terminology for accurate translation of comments or functions, no additional unnecessary additions are needed. Translate the following text into <targetLang>",
+          "markdownDescription": "%config.translatePrompt.desc%",
+          "ui": {
+            "inputBox": {
+              "rows": 5
+            }
+          }
         }
       }
     },

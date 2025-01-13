@@ -33,12 +33,19 @@ Configure the following options in VS Code settings:
 |  `aiTranslate.largeModelMaxTokens`  |                                                        Maximum tokens (0 means unlimited)                                                        |                 2048                 |
 | `aiTranslate.largeModelTemperature` | The temperature parameter of a large model<br />(a lower value produces more certain results, while a higher value yields more diverse outcomes) |                 0.2                 |
 |      `aiTranslate.namingRules`      |                                                                Naming Conventions                                                                | Translation: Determined by AI itself |
+|`aiTranslate.translatePrompt`|Custom Translation Prompts <br/> you can use `<target lang>` to express your target language|Check Configuration (Please fill in completely, you can reset to get the original settings)|
 
 ## 🚀 Quick Start
 
 1. Please configure the API-related information and ensure that the large model service provider you are using is compatible with OpenAI's API call format
-   [OpenAI Official Documentation](https://platform.openai.com/docs/api-reference/chat)
+   [OpenAI Official Documentation](https://platform.openai.com/docs/api-reference/chat).Here is a detailed explanation of this type of API and how to temporary integration of it.  [Immersive Translation Configuration Documentation](https://immersivetranslate.com/en/docs/services/ai/)
    ![配置](./image/setting.png)
+   *if you want to use local model via Ollama*
+   ![ollama配置](./image/ollama-setting.png)
+   Prompt setting
+   ![prompt配置](./image/prompt-setting.png)
+   Prompt display
+   ![prompt效果](./image/prompt-setting-show.png)
 2. Once configuration is complete, please execute the "Comment Translate" command from the "Comment Translate:Change translate source" section
    ![换源](./image/change.png)
 3. Select "AI translate" as the translation source

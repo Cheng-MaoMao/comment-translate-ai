@@ -10,6 +10,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
+- 🔧 添加自定义prompt设置
+
+## [0.0.6-post1] - 2025-01-14
+
+### Changed
+
 - 🤖 优化了AI提示词
 
 ## [0.0.6] - 2025-01-02
