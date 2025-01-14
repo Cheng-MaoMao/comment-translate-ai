@@ -12,7 +12,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - 🔧 添加自定义prompt设置
 
-## [0.0.6-post1] - 2025-01-14
+## [0.0.7] - 2025-01-14
 
 ### Changed
 
