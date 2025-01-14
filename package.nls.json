@@ -13,5 +13,5 @@
     "config.namingRules.hungarian": "Example: Hungarian notation",
     "config.aiTranslate.aiNaming": "AI Naming",
     "config.debugMode.desc": "Debug mode",
-    "config.translatePrompt.desc": "Custom translation prompts. You can use the placeholder `<target lang>` to express your target language"
+    "config.translatePrompt.desc": "Custom translation prompts. You can use the placeholder `<targetlang>` to express your target language"
 }
