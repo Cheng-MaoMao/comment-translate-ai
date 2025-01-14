@@ -37,26 +37,44 @@ Configure the following options in VS Code settings:
 
 ## 🚀 Quick Start
 
-1. Please configure the API-related information and ensure that the large model service provider you are using is compatible with OpenAI's API call format
-   [OpenAI Official Documentation](https://platform.openai.com/docs/api-reference/chat).Here is a detailed explanation of this type of API and how to temporary integration of it.  [Immersive Translation Configuration Documentation](https://immersivetranslate.com/en/docs/services/ai/)
-   ![配置](./image/setting.png)
-   *if you want to use local model via Ollama*
-   ![ollama配置](./image/ollama-setting.png)
-   Prompt setting
-   ![prompt配置](./image/prompt-setting.png)
-   Prompt display
-   ![prompt效果](./image/prompt-setting-show.png)
-2. Once configuration is complete, please execute the "Comment Translate" command from the "Comment Translate:Change translate source" section
-   ![换源](./image/change.png)
-3. Select "AI translate" as the translation source
-   ![选择](./image/select.png)
+1. **Configure API Information**  
+   Make sure that the large model service provider you are using is compatible with the OpenAI API call format. For detailed API call instructions and usage, please refer to the [Open AI official documentation](https://platform.openai.com/docs/api-reference/chat).  
+   You can also refer to the [Immersive Translation Configuration Documentation](https://immersivetranslate.com/zh-Hans/docs/services/ai) for more configuration details.
+
+   **Recommended Service Providers**:
+   - **Mainland China**: It is recommended to use [DeepSeek](https://platform.deepseek.com/), as this model has excellent performance and the token price is relatively inexpensive. This is not an advertisement, just a recommendation.
+
+   **Configuration Example**:  
+   ![Configuration](./image/setting.png)
+
+   If you don't want to spend money, you can use **Ollama** to call the local large model. I personally use `gemma2:2b`, which offers good response speed and translation quality.
+
+   **Ollama Configuration Example**:  
+   ![Ollama Configuration](./image/ollama-setting.png)
+
+   **Prompt Configuration**:  
+   ![Prompt Configuration](./image/prompt-setting.png)
+
+   **Prompt Effect Display**:  
+   ![Prompt Effect](./image/prompt-setting-show.png)
+
+2. **After Configuration**  
+   After completing the configuration, invoke the “Comment Translate” command in the “Comment Translate: Change translate source” option.
+
+   ![Change Source](./image/change.png)
+
+3. **Select Translation Source**  
+   In the popup options, choose the translation source as **"AI translate"**.
+
+   ![Select](./image/select.png)
+
 
 ### How to use "AI Naming"
 
 * Right-click the mouse→Select "Comment Translation" from the list→Click "AI Naming" to use it
 * Translate the naming according to the selected naming format into English
 * Optimize naming according to the naming convention
-  ![AI命名](./image/AI%20Naming.gif)
+  ![AI_Naming](./image/AI%20Naming.gif)
 
 ## 🤝 Contributing
 
