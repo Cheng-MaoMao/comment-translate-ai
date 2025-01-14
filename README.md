@@ -37,20 +37,37 @@
 
 ## 🚀 快速开始
 
-1. 配置 API 相关信息，请确保您使用的大模型服务商兼容OpenAI的API调用格式
-   [Open AI官方文档](https://platform.openai.com/docs/api-reference/chat)。这里是详细解释了什么此类API及如何调用 [沉浸式翻译配置文档](https://immersivetranslate.com/zh-Hans/docs/services/ai)<br/>
-   *中国大陆地区推荐使用[DeepSeek](https://platform.deepseek.com/)
-   不是广告，因为这个模型效果好而且token便宜推荐一下*
-   ![配置](./image/setting.png)<br/>
-   *不想花钱也可以使用ollama调用本地大模型，我使用gemma2:2b响应速度和翻译效果都不错*
-   ![ollama配置](./image/ollama-setting.png)<br/>
-   Prompt设置<br/>
-   ![prompt配置](./image/prompt-setting.png)<br/>
-   Prompt效果展示<br/>
+1. **配置 API 相关信息**  
+   请确保您使用的大模型服务商兼容 OpenAI 的 API 调用格式。详细的 API 调用和使用说明请参考：[Open AI 官方文档](https://platform.openai.com/docs/api-reference/chat)。  
+   另外，您也可以参考[沉浸式翻译配置文档](https://immersivetranslate.com/zh-Hans/docs/services/ai)了解更多配置细节。
+
+   **推荐服务商**：
+   - **中国大陆地区**：推荐使用 [DeepSeek](https://platform.deepseek.com/)，此模型效果优秀且 token 价格较为便宜。不是广告，仅为推荐。
+   
+   **配置示例**：
+   ![配置](./image/setting.png)
+
+   如果您不想花钱，也可以使用 **Ollama** 调用本地大模型。个人使用的是 `gemma2:2b`，其响应速度和翻译效果都很不错。
+
+   **Ollama 配置示例**：
+   ![ollama配置](./image/ollama-setting.png)
+
+   **Prompt 设置**：
+   ![prompt配置](./image/prompt-setting.png)
+
+   **Prompt 效果展示**：
    ![prompt效果](./image/prompt-setting-show.png)
-3. 配置完成后，请调用“Comment Translate”中的“Comment Translate:Change translate source”命令
+
+---
+
+2. **配置完成后**  
+   完成上述配置后，请调用“Comment Translate”中的“Comment Translate: Change translate source”命令。
+
    ![换源](./image/change.png)
-4. 选择翻译源为"AI translate"
+
+3. **选择翻译源**  
+   在弹出的选项中，选择翻译源为 **"AI translate"**。
+
    ![选择](./image/select.png)
 
 ### 怎么使用"AI命名"
