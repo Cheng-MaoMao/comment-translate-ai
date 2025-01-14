@@ -43,19 +43,23 @@
 
    **推荐服务商**：
    - **中国大陆地区**：推荐使用 [DeepSeek](https://platform.deepseek.com/)，此模型效果优秀且 token 价格较为便宜。不是广告，仅为推荐。
-   
+
    **配置示例**：
+   
    ![配置](./image/setting.png)
 
    如果您不想花钱，也可以使用 **Ollama** 调用本地大模型。个人使用的是 `gemma2:2b`，其响应速度和翻译效果都很不错。
 
    **Ollama 配置示例**：
+   
    ![ollama配置](./image/ollama-setting.png)
 
    **Prompt 设置**：
+   
    ![prompt配置](./image/prompt-setting.png)
 
    **Prompt 效果展示**：
+   
    ![prompt效果](./image/prompt-setting-show.png)
 
 ---
