@@ -42,7 +42,7 @@ Configure the following options in VS Code settings:
    You can also refer to the [Immersive Translation Configuration Documentation](https://immersivetranslate.com/zh-Hans/docs/services/ai) for more configuration details.
 
    **Recommended Service Providers**:
-   - **Mainland China**: It is recommended to use [DeepSeek](https://platform.deepseek.com/), as this model has excellent performance and the token price is relatively inexpensive. This is not an advertisement, just a recommendation.
+   - **Recommended API**: It is recommended to use [DeepSeek](https://platform.deepseek.com/), as this model has excellent performance and the token price is relatively inexpensive. This is not an advertisement, just a recommendation.
 
    **Configuration Example**:  
    ![Configuration](./image/setting.png)
