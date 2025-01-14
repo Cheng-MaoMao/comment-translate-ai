@@ -109,6 +109,10 @@ Issues and Pull Requests are welcome!
 
 - 🤖 Optimized AI prompts
 
+### 0.0.6-post1
+
+- 🔧 Add custom prompt settings
+
 ## 🙏 Acknowledgments
 
 This project is developed based on the following excellent open-source projects:
