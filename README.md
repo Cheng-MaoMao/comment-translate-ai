@@ -44,9 +44,9 @@
    ![配置](./image/setting.png)<br/>
    *不想花钱也可以使用ollama调用本地大模型，我使用gemma2:2b响应速度和翻译效果都不错*
    ![ollama配置](./image/ollama-setting.png)<br/>
-   Prompt设置
+   Prompt设置<br/>
    ![prompt配置](./image/prompt-setting.png)<br/>
-   Prompt效果展示
+   Prompt效果展示<br/>
    ![prompt效果](./image/prompt-setting-show.png)
 3. 配置完成后，请调用“Comment Translate”中的“Comment Translate:Change translate source”命令
    ![换源](./image/change.png)
