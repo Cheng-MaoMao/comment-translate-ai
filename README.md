@@ -62,10 +62,6 @@
    
    ![prompt效果](./image/prompt-setting-show.png)
 
-    | ![配置](./image/setting.png) | ![ollama配置](./image/ollama-setting.png) | ![prompt配置](./image/prompt-setting.png) |
-   |:---------------------------:|:---------------------------------------:|:----------------------------------------:|
-   | ![prompt效果](./image/prompt-setting-show.png) |   |   |
-
 3. **配置完成后**  
    完成上述配置后，请调用“Comment Translate”中的“Comment Translate: Change translate source”命令。
 
