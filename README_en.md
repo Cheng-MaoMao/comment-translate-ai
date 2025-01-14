@@ -33,7 +33,7 @@ Configure the following options in VS Code settings:
 |  `aiTranslate.largeModelMaxTokens`  |                                                        Maximum tokens (0 means unlimited)                                                        |                 2048                 |
 | `aiTranslate.largeModelTemperature` | The temperature parameter of a large model<br />(a lower value produces more certain results, while a higher value yields more diverse outcomes) |                 0.2                 |
 |      `aiTranslate.namingRules`      |                                                                Naming Conventions                                                                | Translation: Determined by AI itself |
-|`aiTranslate.translatePrompt`|Custom Translation Prompts <br/> you can use `<target lang>` to express your target language|Check Configuration (Please fill in completely, you can reset to get the original settings)|
+|`aiTranslate.translatePrompt`|Custom Translation Prompts <br/> you can use `<targetlang>` to express your target language|Check Configuration (Please fill in completely, you can reset to get the original settings)|
 
 ## 🚀 Quick Start
 
@@ -42,12 +42,12 @@ Configure the following options in VS Code settings:
    You can also refer to the [Immersive Translation Configuration Documentation](https://immersivetranslate.com/zh-Hans/docs/services/ai) for more configuration details.
 
    **Recommended Service Providers**:
-   - **Recommended API**: It is recommended to use [DeepSeek](https://platform.deepseek.com/), as this model has excellent performance and the token price is relatively inexpensive. This is not an advertisement, just a recommendation.
+   - It is recommended to use [DeepSeek](https://platform.deepseek.com/), as this model has excellent performance and the token price is relatively inexpensive. This is not an advertisement, just a recommendation.
 
    **Configuration Example**:  
    ![Configuration](./image/setting.png)
 
-   If you don't want to spend money, you can use **Ollama** to call the local large model. I personally use `gemma2:2b`, which offers good response speed and translation quality.
+   You can also use **Ollama** to invoke the local model. I personally use `gemma2:2b`, which offers good response speed and translation quality.
 
    **Ollama Configuration Example**:  
    ![Ollama Configuration](./image/ollama-setting.png)
