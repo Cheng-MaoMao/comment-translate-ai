@@ -109,7 +109,7 @@ Issues and Pull Requests are welcome!
 
 - 🤖 Optimized AI prompts
 
-### 0.0.6-post1
+### 0.0.7
 
 - 🔧 Add custom prompt settings
 
