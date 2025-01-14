@@ -33,17 +33,43 @@
 |  `aiTranslate.largeModelMaxTokens`  |                       最大 token 数（0表示不限制）                       |     2048     |
 | `aiTranslate.largeModelTemperature` | 大模型温度参数<br />(较低的值产生更确定的结果，较高的值产生更多样的结果) |     0.2     |
 |      `aiTranslate.namingRules`      |                                 命名规则                                 | 由AI自行判断 |
+|`aiTranslate.translatePrompt`|自定义翻译提示词<br/>可以使用`<targetLang>`来表示您的目标语言|看配置(一定要填写完整，删除了可以重置)|
 
 ## 🚀 快速开始
 
-1. 配置 API 相关信息，请确保您使用的大模型服务商兼容OpenAI的API调用格式
-   [Open AI官方文档](https://platform.openai.com/docs/api-reference/chat)
-   *中国大陆地区推荐使用[DeepSeek](https://platform.deepseek.com/)
-   不是广告，因为这个模型效果好而且token便宜推荐一下*
+1. **配置 API 相关信息**  
+   请确保您使用的大模型服务商兼容 OpenAI 的 API 调用格式。详细的 API 调用和使用说明请参考：[Open AI 官方文档](https://platform.openai.com/docs/api-reference/chat)。  
+   另外，您也可以参考[沉浸式翻译配置文档](https://immersivetranslate.com/zh-Hans/docs/services/ai)了解更多配置细节。
+
+   **推荐服务商**：
+   - **中国大陆地区**：推荐使用 [DeepSeek](https://platform.deepseek.com/)，此模型效果优秀且 token 价格较为便宜。不是广告，仅为推荐。
+
+   **配置示例**：
+   
    ![配置](./image/setting.png)
-2. 配置完成后，请调用“Comment Translate”中的“Comment Translate:Change translate source”命令
+
+   如果您不想花钱，也可以使用 **Ollama** 调用本地大模型。个人使用的是 `gemma2:2b`，其响应速度和翻译效果都很不错。
+
+   **Ollama 配置示例**：
+   
+   ![ollama配置](./image/ollama-setting.png)
+
+   **Prompt 设置**：
+   
+   ![prompt配置](./image/prompt-setting.png)
+
+   **Prompt 效果展示**：
+   
+   ![prompt效果](./image/prompt-setting-show.png)
+
+3. **配置完成后**  
+   完成上述配置后，请调用“Comment Translate”中的“Comment Translate: Change translate source”命令。
+
    ![换源](./image/change.png)
-3. 选择翻译源为"AI translate"
+
+4. **选择翻译源**  
+   在弹出的选项中，选择翻译源为 **"AI translate"**。
+
    ![选择](./image/select.png)
 
 ### 怎么使用"AI命名"
@@ -85,6 +111,10 @@
 ### 0.0.6
 
 - 🤖 优化了AI提示词
+
+### 0.0.7
+
+- 🔧 添加自定义prompt设置
 
 ## 🙏 致谢
 

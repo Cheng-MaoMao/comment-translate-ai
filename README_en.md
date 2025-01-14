@@ -33,23 +33,48 @@ Configure the following options in VS Code settings:
 |  `aiTranslate.largeModelMaxTokens`  |                                                        Maximum tokens (0 means unlimited)                                                        |                 2048                 |
 | `aiTranslate.largeModelTemperature` | The temperature parameter of a large model<br />(a lower value produces more certain results, while a higher value yields more diverse outcomes) |                 0.2                 |
 |      `aiTranslate.namingRules`      |                                                                Naming Conventions                                                                | Translation: Determined by AI itself |
+|`aiTranslate.translatePrompt`|Custom Translation Prompts <br/> you can use `<targetlang>` to express your target language|Check Configuration (Please fill in completely, you can reset to get the original settings)|
 
 ## 🚀 Quick Start
 
-1. Please configure the API-related information and ensure that the large model service provider you are using is compatible with OpenAI's API call format
-   [OpenAI Official Documentation](https://platform.openai.com/docs/api-reference/chat)
-   ![配置](./image/setting.png)
-2. Once configuration is complete, please execute the "Comment Translate" command from the "Comment Translate:Change translate source" section
-   ![换源](./image/change.png)
-3. Select "AI translate" as the translation source
-   ![选择](./image/select.png)
+1. **Configure API Information**  
+   Make sure that the large model service provider you are using is compatible with the OpenAI API call format. For detailed API call instructions and usage, please refer to the [Open AI official documentation](https://platform.openai.com/docs/api-reference/chat).  
+   You can also refer to the [Immersive Translation Configuration Documentation](https://immersivetranslate.com/zh-Hans/docs/services/ai) for more configuration details.
+
+   **Recommended Service Providers**:
+   - It is recommended to use [DeepSeek](https://platform.deepseek.com/), as this model has excellent performance and the token price is relatively inexpensive. This is not an advertisement, just a recommendation.
+
+   **Configuration Example**:  
+   ![Configuration](./image/setting.png)
+
+   You can also use **Ollama** to invoke the local model. I personally use `gemma2:2b`, which offers good response speed and translation quality.
+
+   **Ollama Configuration Example**:  
+   ![Ollama Configuration](./image/ollama-setting.png)
+
+   **Prompt Configuration**:  
+   ![Prompt Configuration](./image/prompt-setting.png)
+
+   **Prompt Effect Display**:  
+   ![Prompt Effect](./image/prompt-setting-show.png)
+
+2. **After Configuration**  
+   After completing the configuration, invoke the “Comment Translate” command in the “Comment Translate: Change translate source” option.
+
+   ![Change Source](./image/change.png)
+
+3. **Select Translation Source**  
+   In the popup options, choose the translation source as **"AI translate"**.
+
+   ![Select](./image/select.png)
+
 
 ### How to use "AI Naming"
 
 * Right-click the mouse→Select "Comment Translation" from the list→Click "AI Naming" to use it
 * Translate the naming according to the selected naming format into English
 * Optimize naming according to the naming convention
-  ![AI命名](./image/AI%20Naming.gif)
+  ![AI_Naming](./image/AI%20Naming.gif)
 
 ## 🤝 Contributing
 
@@ -83,6 +108,10 @@ Issues and Pull Requests are welcome!
 ### 0.0.6
 
 - 🤖 Optimized AI prompts
+
+### 0.0.7
+
+- 🔧 Add custom prompt settings
 
 ## 🙏 Acknowledgments
 
