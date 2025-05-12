@@ -153,6 +153,11 @@
 
 - 🔧 修复BUG [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
 
+### 1.0.3
+
+- 🔧 修复BUG [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
+上个版本没修好😭
+
 ## 🙏 致谢
 
 本项目基于以下优秀的开源项目开发：

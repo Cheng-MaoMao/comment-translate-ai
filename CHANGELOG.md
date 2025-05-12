@@ -11,8 +11,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - 🔧 修复BUG [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
+上个版本没修好😭
 
-## [1.0.1] - 2025-05-12
+## [1.0.3] - 2025-05-12
+
+### Changed
+
+- 🔧 修复BUG [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
+
+## [1.0.2] - 2025-05-12
 
 ### Changed
 

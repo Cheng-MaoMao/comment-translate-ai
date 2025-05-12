@@ -152,6 +152,11 @@ Issues and Pull Requests are welcome!
 
 - 🔧 Fix bugs [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
 
+### 1.0.3
+
+- 🔧 Fix bugs [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
+The previous version wasn't fixed properly.😭
+
 ## 🙏 Acknowledgments
 
 This project is developed based on the following excellent open-source projects:
