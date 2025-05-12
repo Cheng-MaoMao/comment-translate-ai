@@ -117,7 +117,7 @@ export class AiTranslate implements ITranslate {
     }
 
     // 使用大模型 API 执行翻译
-    async translate(content: string, { to = 'auto' }: ITranslateOptions) {
+    async translate(content: string, { to = 'auto' }: ITranslateOptions, suppressErrorMessage: boolean = false) {
         try {
             if (!this._defaultOption.largeModelKey) {
                 throw new Error('请配置 API Key');
@@ -139,28 +139,23 @@ export class AiTranslate implements ITranslate {
             }
 
             if (this._defaultOption.modelType === 'OpenAI') {
-                let url; // 在这里声明 url
+                let url;
                 let apiUrl = this._defaultOption.largeModelApi;
-                const endpoint = '/chat/completions'; // 标准端点
+                const endpoint = '/chat/completions';
 
                 if (apiUrl.endsWith(endpoint)) {
                     url = apiUrl;
                 } else {
-                    // 移除末尾所有斜杠后拼接标准端点
                     url = `${apiUrl.replace(/\/+$/, '')}${endpoint}`;
                 }
 
-                // 规范化协议和路径中的斜杠
-                // 1. 修正协议中的单斜杠 (e.g., "http:/" to "http://")
                 url = url.replace(/^http:\/(?!\/)/, 'http://').replace(/^https:\/(?!\/)/, 'https://');
-                // 2. 分离协议和路径，并清理路径中的多余斜杠
                 const parts = url.split('://');
                 if (parts.length === 2) {
                     const protocol = parts[0];
-                    const rest = parts[1].replace(/\/\/+/g, '/'); // 将路径中连续的多个斜杠替换为单个斜杠
+                    const rest = parts[1].replace(/\/\/+/g, '/');
                     url = `${protocol}://${rest}`;
                 }
-                // 如果 URL 格式不符合 protocol://path 的形式，则保持原样，依赖后续 axios 报错
 
                 const data = {
                     model: this._defaultOption.largeModelName,
@@ -184,7 +179,6 @@ export class AiTranslate implements ITranslate {
                         responseType: 'stream',
                         timeout: 50000
                     });
-
                     let result = '';
                     const streamResult = await new Promise<string>((resolve, reject) => {
                         response.data.on('data', (chunk: Buffer) => {
@@ -204,18 +198,15 @@ export class AiTranslate implements ITranslate {
                                 }
                             }
                         });
-
                         response.data.on('end', () => resolve(result.trim()));
                         response.data.on('error', (err: Error) => reject(err));
                     });
-
                     return this.filterThinkingContent(streamResult);
                 } else {
                     const res = await axios.post(url, data, {
                         headers,
                         timeout: 50000
                     });
-
                     if (!res.data?.choices?.[0]?.message?.content) {
                         throw new Error('API响应格式不符合标准');
                     }
@@ -226,14 +217,12 @@ export class AiTranslate implements ITranslate {
                 const model = genAI.getGenerativeModel({
                     model: this._defaultOption.largeModelName || "gemini-2.0-flash"
                 });
-
                 const result = await model.generateContent({
                     contents: [{
                         role: "user",
                         parts: [{ text: promptContent }]
                     }]
                 });
-
                 const response = await result.response;
                 if (!response.text()) {
                     throw new Error('Gemini API 返回内容为空');
@@ -241,7 +230,9 @@ export class AiTranslate implements ITranslate {
                 return this.filterThinkingContent(response.text().trim());
             }
         } catch (error: any) {
-            window.showErrorMessage(`翻译失败: ${error.message}`);
+            if (!suppressErrorMessage) {
+                window.showErrorMessage(`翻译失败: ${error.message}`);
+            }
             throw error;
         }
     }

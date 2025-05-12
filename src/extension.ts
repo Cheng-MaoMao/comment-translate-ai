@@ -24,19 +24,17 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        // 获取所有文档的原始诊断（只取 VSCode 默认集合，不取自定义集合）
+        // 获取所有文档的诊断，过滤掉空消息的诊断
         const allDiagnostics = vscode.languages.getDiagnostics();
-
         for (const [uri, diagnostics] of allDiagnostics) {
-            // 只翻译 VSCode 默认诊断，不处理自定义集合
-            if (!diagnostics.length) {
+            const validDiagnostics = diagnostics.filter(diag => diag.message && diag.message.trim());
+            if (validDiagnostics.length === 0) {
                 diagnosticCollection.delete(uri);
                 continue;
             }
-
-            const translatedDiagnostics: Diagnostic[] = [];
-            for (const diag of diagnostics) {
-                // 避免重复翻译（只翻译未翻译过的）
+            const translatedDiagnostics: vscode.Diagnostic[] = [];
+            for (const diag of validDiagnostics) {
+                // 避免重复翻译
                 if ((diag as any).translated) continue;
 
                 const cacheKey = `${diag.message}__${lang}`;
@@ -45,7 +43,8 @@ export function activate(context: vscode.ExtensionContext) {
                     translatedMsg = translatedMessageCache.get(cacheKey)!;
                 } else {
                     try {
-                        translatedMsg = await aiTranslate.translate(diag.message, { to: lang });
+                        // 调用 translate 时启用 suppressErrorMessage 来避免弹窗
+                        translatedMsg = await aiTranslate.translate(diag.message, { to: lang }, true);
                         translatedMessageCache.set(cacheKey, translatedMsg);
                     } catch {
                         translatedMsg = diag.message;
