@@ -24,7 +24,7 @@ interface TranslateOption {
     customNamingPrompt?: string;
     streaming?: boolean; // 仅 OpenAI 模式使用
     filterThinkingContent?: boolean; // 是否过滤深度思考内容
-    problemTranslateLang?: string; // 新增
+    problemTranslateLang?: string;
 }
 
 // AiTranslate 类，实现了 ITranslate 接口
@@ -94,7 +94,7 @@ export class AiTranslate implements ITranslate {
             customNamingPrompt: getConfig<string>('customNamingPrompt'),
             streaming: getConfig<boolean>('streaming'),
             filterThinkingContent: getConfig<boolean>('filterThinkingContent'),
-            problemTranslateLang: getConfig<string>('problemTranslateLang')
+            problemTranslateLang: getConfig<string>('problemTranslateLang'),
         };
         return defaultOption;
     }
@@ -126,6 +126,7 @@ export class AiTranslate implements ITranslate {
                 throw new Error('请配置 API Key');
             }
 
+
             const targetLang = to === 'auto' ? 'zh-CN' : to;
             let promptContent: string;
 
@@ -137,8 +138,7 @@ export class AiTranslate implements ITranslate {
                     .replace('${targetLang}', targetLang)
                     .replace('${content}', content);
             } else {
-                promptContent = `请充当翻译，检查句子或单词是否准确，自然、流畅、习惯地翻译，使用专业的计算机术语以准确翻译注释或功能，将以下文本翻译成${targetLang}:\n${content}
-            注意：不需要添加额外的解释说明，直接返回翻译内容。`;
+                promptContent = `Translate the following text to ${targetLang}. Only return the translated content, without any explanations or extra text.\n\nInput: "${content}"`;
             }
 
             const options: TranslateServiceOptions = {
@@ -187,11 +187,9 @@ export class AiTranslate implements ITranslate {
                     .replace('${paragraph}', paragraph)
                     .replace('${languageId}', languageId);
             } else if (this._defaultOption.namingRules == "default") {
-                promptContent = `请根据"${languageId}"确定"${paragraph}"中的"${variableName}"是类名、方法名、函数名还是其他。然后，根据"${languageId}"的命名规范，使用专业术语将"${variableName}"翻译成英文，并直接返回"${variableName}"的翻译结果。
-            注意：不需要添加额外的解释说明，直接返回翻译内容。`;
+                promptContent = `Based on the programming language "${languageId}" and the code context "${paragraph}", determine if "${variableName}" is a class, method, function, or variable. Then, translate "${variableName}" into English following the standard naming conventions for "${languageId}". Return only the translated variable name, with no other text or explanation.`;
             } else {
-                promptContent = `请根据"${languageId}"确定"${paragraph}"中的"${variableName}"是类名、方法名、函数名还是其他。然后，根据"${languageId}"的标准规范和命名规则"${this._defaultOption.namingRules}"，将"${variableName}"翻译成专业的英文，并直接返回"${variableName}"的翻译结果。
-            注意：不需要添加额外的解释说明，直接返回翻译内容。`;
+                promptContent = `Based on the programming language "${languageId}" and the code context "${paragraph}", determine if "${variableName}" is a class, method, function, or variable. Then, translate "${variableName}" into English following the naming convention "${this._defaultOption.namingRules}". Return only the translated variable name, with no other text or explanation.`;
             }
 
             const options: TranslateServiceOptions = {
@@ -210,6 +208,46 @@ export class AiTranslate implements ITranslate {
         } catch (error: any) {
             window.showErrorMessage(`变量名翻译失败: ${error.message}`);
             throw error;
+        }
+    }
+
+    // 检测语言方法
+    async detectLanguage(text: string): Promise<string> {
+        try {
+            if (!this._defaultOption.largeModelKey) {
+                // 如果没有配置API Key，可以返回一个默认值或抛出错误
+                // 在这里我们选择返回 'Configure the large model API key'，让调用者处理
+                return 'Configure the large model API key';
+            }
+
+            const promptContent = `Your task is to identify the language of the given text. You must respond with ONLY the BCP 47 language code and nothing else. For example, for "你好", respond "zh-CN". For "Hello", respond "en". Do not add any explanation or surrounding text. The text to analyze is: """${text}"""`;
+
+            const options: TranslateServiceOptions = {
+                modelType: this._defaultOption.modelType!,
+                apiKey: this._defaultOption.largeModelKey,
+                apiEndpoint: this._defaultOption.largeModelApi!,
+                model: this._defaultOption.largeModelName!,
+                temperature: 0, // 对于分类任务，温度设为0更稳定
+                maxTokens: 100, // 语言代码很短，不需要很多token
+                streaming: false,
+            };
+
+            const result = await performTranslation(promptContent, options);
+
+            // 使用正则表达式从返回结果中提取 BCP 47 语言代码
+            const bcp47Match = result.match(/[a-zA-Z]{2,3}(-[a-zA-Z0-9]+)*/);
+            if (bcp47Match) {
+                return bcp47Match[0];
+            }
+
+            // 如果正则匹配失败，作为备用方案，返回清理后的原始结果
+            return result.trim().replace(/["'.]/g, '');
+
+        } catch (error: any) {
+            // 在语言检测失败时，可以不打扰用户，直接在控制台打印错误
+            console.error(`Language detection failed: ${error.message}`);
+            // 返回 'Language detection failed' 表示检测失败
+            return 'Language detection failed';
         }
     }
 }
