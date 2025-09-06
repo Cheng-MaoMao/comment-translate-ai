@@ -17,74 +17,60 @@ export function activate(context: vscode.ExtensionContext) {
     const diagnosticCollection = vscode.languages.createDiagnosticCollection();
     context.subscriptions.push(diagnosticCollection);
 
-    vscode.languages.onDidChangeDiagnostics(async () => {
-        const lang = aiTranslate['_defaultOption'].problemTranslateLang;
+    const translateDiagnostics = async () => {
+        const lang = aiTranslate.defaultOption.problemTranslateLang;
         if (!lang || lang === 'none') {
             diagnosticCollection.clear();
             return;
         }
 
-        // 获取所有文档的诊断，过滤掉空消息的诊断
         const allDiagnostics = vscode.languages.getDiagnostics();
         for (const [uri, diagnostics] of allDiagnostics) {
-            const validDiagnostics = diagnostics.filter(diag => diag.message && diag.message.trim());
+            const validDiagnostics = diagnostics.filter(diag => diag.message && diag.message.trim() && !(diag as any).translated);
             if (validDiagnostics.length === 0) {
-                diagnosticCollection.delete(uri);
+                // 如果没有需要翻译的，但该uri下还有旧的翻译过的诊断，不清空
+                const existing = diagnosticCollection.get(uri);
+                if (!existing || existing.length === 0) {
+                    diagnosticCollection.delete(uri);
+                }
                 continue;
             }
+
             const translatedDiagnostics: vscode.Diagnostic[] = [];
             for (const diag of validDiagnostics) {
-                // 避免重复翻译
-                if ((diag as any).translated) continue;
-
-                const cacheKey = `${diag.message}__${lang}`;
-                let translatedMsg: string;
-                if (translatedMessageCache.has(cacheKey)) {
-                    translatedMsg = translatedMessageCache.get(cacheKey)!;
-                } else {
-                    try {
-                        // 调用 translate 时启用 suppressErrorMessage 来避免弹窗
-                        translatedMsg = await aiTranslate.translate(diag.message, { to: lang }, true);
-                        translatedMessageCache.set(cacheKey, translatedMsg);
-                    } catch {
-                        translatedMsg = diag.message;
-                    }
-                }
-                const newDiag = new vscode.Diagnostic(
-                    diag.range,
-                    translatedMsg,
-                    diag.severity
-                );
-                newDiag.source = diag.source;
-                newDiag.code = diag.code;
-                (newDiag as any).translated = true;
-                translatedDiagnostics.push(newDiag);
+                const translatedDiag = await translateSingleDiagnostic(diag, lang, aiTranslate);
+                translatedDiagnostics.push(translatedDiag);
             }
-            diagnosticCollection.set(uri, translatedDiagnostics);
+
+            // 合并新的翻译和已有的翻译
+            const existingDiagnostics = diagnosticCollection.get(uri)?.filter(d => (d as any).translated) || [];
+            diagnosticCollection.set(uri, [...existingDiagnostics, ...translatedDiagnostics]);
         }
-    });
+    };
+
+    vscode.languages.onDidChangeDiagnostics(translateDiagnostics);
 
     // 注册AI命名命令
     let translateVarCommand = vscode.commands.registerCommand('aiTranslate.aiNaming', async () => {
         // 获取当前活动编辑器
-        const vscode = require('vscode');
         const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
 
         const otherPluginConfig = vscode.workspace.getConfiguration('commentTranslate');//获取插件配置
         const someSetting = otherPluginConfig.get('source');//获取插件配置中的某个配置项
 
         // 判断翻译源是否为 AI 翻译
-        switch (someSetting) {
-            case 'Cheng-MaoMao.ai-powered-comment-translate-extension-ai-powered-comment-translate-extension':
-                break;
-            case 'AI translate':
-                break;
-            default:
-                vscode.window.showInformationMessage('请将翻译源选择为AI translate');
-                return;
-        }
+        const validSources = [
+            'ai-powered-comment-translate-extension', // The extension ID from package.json
+            'AI translate' // The display name
+        ];
 
-        if (!editor) return;
+        if (!validSources.includes(someSetting as string)) {
+            vscode.window.showInformationMessage('请将翻译源选择为AI translate');
+            return;
+        }
 
         // 获取选中的文本和语言类型
         const selection = editor.selection;
@@ -116,6 +102,34 @@ export function activate(context: vscode.ExtensionContext) {
         }
     };
 }
+
+
+async function translateSingleDiagnostic(diag: vscode.Diagnostic, lang: string, translator: AiTranslate): Promise<vscode.Diagnostic> {
+    const cacheKey = `${diag.message}__${lang}`;
+    let translatedMsg: string;
+
+    if (translatedMessageCache.has(cacheKey)) {
+        translatedMsg = translatedMessageCache.get(cacheKey)!;
+    } else {
+        try {
+            translatedMsg = await translator.translate(diag.message, { to: lang }, true);
+            translatedMessageCache.set(cacheKey, translatedMsg);
+        } catch {
+            translatedMsg = diag.message; // 翻译失败则使用原文
+        }
+    }
+
+    const newDiag = new vscode.Diagnostic(
+        diag.range,
+        translatedMsg,
+        diag.severity
+    );
+    newDiag.source = diag.source;
+    newDiag.code = diag.code;
+    (newDiag as any).translated = true; // 标记为已翻译
+    return newDiag;
+}
+
 
 /**
  * 扩展停用时的清理函数

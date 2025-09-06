@@ -1,8 +1,7 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import axios from 'axios';
 import * as vscode from 'vscode';
 import { workspace, window } from 'vscode';
 import { ITranslate, ITranslateOptions } from 'comment-translate-manager';
+import { performTranslation, TranslateServiceOptions } from './translationService';
 
 const PREFIXCONFIG = 'aiTranslate';
 
@@ -47,6 +46,10 @@ export class AiTranslate implements ITranslate {
     }
 
     private _defaultOption: TranslateOption; // 默认的翻译选项
+
+    public get defaultOption(): TranslateOption {
+        return this._defaultOption;
+    }
 
     // 检查自定义提示词的格式
     private checkCustomPrompt(type: 'translate' | 'naming', prompt: string): boolean {
@@ -138,97 +141,19 @@ export class AiTranslate implements ITranslate {
             注意：不需要添加额外的解释说明，直接返回翻译内容。`;
             }
 
-            if (this._defaultOption.modelType === 'OpenAI') {
-                let url;
-                let apiUrl = this._defaultOption.largeModelApi;
-                const endpoint = '/chat/completions';
+            const options: TranslateServiceOptions = {
+                modelType: this._defaultOption.modelType!,
+                apiKey: this._defaultOption.largeModelKey,
+                apiEndpoint: this._defaultOption.largeModelApi!,
+                model: this._defaultOption.largeModelName!,
+                temperature: this._defaultOption.largeModelTemperature,
+                maxTokens: this._defaultOption.largeModelMaxTokens,
+                streaming: this._defaultOption.streaming,
+            };
 
-                if (apiUrl.endsWith(endpoint)) {
-                    url = apiUrl;
-                } else {
-                    url = `${apiUrl.replace(/\/+$/, '')}${endpoint}`;
-                }
+            const result = await performTranslation(promptContent, options);
+            return this.filterThinkingContent(result);
 
-                url = url.replace(/^http:\/(?!\/)/, 'http://').replace(/^https:\/(?!\/)/, 'https://');
-                const parts = url.split('://');
-                if (parts.length === 2) {
-                    const protocol = parts[0];
-                    const rest = parts[1].replace(/\/\/+/g, '/');
-                    url = `${protocol}://${rest}`;
-                }
-
-                const data = {
-                    model: this._defaultOption.largeModelName,
-                    messages: [{
-                        role: "user",
-                        content: promptContent
-                    }],
-                    temperature: this._defaultOption.largeModelTemperature || 0.5,
-                    max_tokens: this._defaultOption.largeModelMaxTokens,
-                    stream: this._defaultOption.streaming
-                };
-
-                const headers = {
-                    'Authorization': `Bearer ${this._defaultOption.largeModelKey}`,
-                    'Content-Type': 'application/json'
-                };
-
-                if (this._defaultOption.streaming) {
-                    const response = await axios.post(url, data, {
-                        headers,
-                        responseType: 'stream',
-                        timeout: 50000
-                    });
-                    let result = '';
-                    const streamResult = await new Promise<string>((resolve, reject) => {
-                        response.data.on('data', (chunk: Buffer) => {
-                            const lines = chunk.toString().split('\n').filter(line => line.trim() !== '');
-                            for (const line of lines) {
-                                if (line.includes('[DONE]')) continue;
-                                try {
-                                    const jsonStr = line.replace(/^data: /, '').trim();
-                                    if (jsonStr) {
-                                        const json = JSON.parse(jsonStr);
-                                        if (json.choices[0].delta?.content) {
-                                            result += json.choices[0].delta.content;
-                                        }
-                                    }
-                                } catch (e) {
-                                    console.error('解析流式数据错误:', e);
-                                }
-                            }
-                        });
-                        response.data.on('end', () => resolve(result.trim()));
-                        response.data.on('error', (err: Error) => reject(err));
-                    });
-                    return this.filterThinkingContent(streamResult);
-                } else {
-                    const res = await axios.post(url, data, {
-                        headers,
-                        timeout: 50000
-                    });
-                    if (!res.data?.choices?.[0]?.message?.content) {
-                        throw new Error('API响应格式不符合标准');
-                    }
-                    return this.filterThinkingContent(res.data.choices[0].message.content.trim());
-                }
-            } else { // Gemini 模式
-                const genAI = new GoogleGenerativeAI(this._defaultOption.largeModelKey);
-                const model = genAI.getGenerativeModel({
-                    model: this._defaultOption.largeModelName || "gemini-2.0-flash"
-                });
-                const result = await model.generateContent({
-                    contents: [{
-                        role: "user",
-                        parts: [{ text: promptContent }]
-                    }]
-                });
-                const response = await result.response;
-                if (!response.text()) {
-                    throw new Error('Gemini API 返回内容为空');
-                }
-                return this.filterThinkingContent(response.text().trim());
-            }
         } catch (error: any) {
             if (!suppressErrorMessage) {
                 window.showErrorMessage(`翻译失败: ${error.message}`);
@@ -269,108 +194,19 @@ export class AiTranslate implements ITranslate {
             注意：不需要添加额外的解释说明，直接返回翻译内容。`;
             }
 
-            if (this._defaultOption.modelType === 'OpenAI') {
-                let url; // 在这里声明 url
-                let apiUrl = this._defaultOption.largeModelApi;
-                const endpoint = '/chat/completions'; // 标准端点
+            const options: TranslateServiceOptions = {
+                modelType: this._defaultOption.modelType!,
+                apiKey: this._defaultOption.largeModelKey,
+                apiEndpoint: this._defaultOption.largeModelApi!,
+                model: this._defaultOption.largeModelName!,
+                temperature: this._defaultOption.largeModelTemperature,
+                maxTokens: this._defaultOption.largeModelMaxTokens,
+                streaming: this._defaultOption.streaming,
+            };
 
-                if (apiUrl.endsWith(endpoint)) {
-                    url = apiUrl;
-                } else {
-                    // 移除末尾所有斜杠后拼接标准端点
-                    url = `${apiUrl.replace(/\/+$/, '')}${endpoint}`;
-                }
+            const result = await performTranslation(promptContent, options);
+            return this.filterThinkingContent(result);
 
-                // 规范化协议和路径中的斜杠
-                // 1. 修正协议中的单斜杠 (e.g., "http:/" to "http://")
-                url = url.replace(/^http:\/(?!\/)/, 'http://').replace(/^https:\/(?!\/)/, 'https://');
-                // 2. 分离协议和路径，并清理路径中的多余斜杠
-                const parts = url.split('://');
-                if (parts.length === 2) {
-                    const protocol = parts[0];
-                    const rest = parts[1].replace(/\/\/+/g, '/'); // 将路径中连续的多个斜杠替换为单个斜杠
-                    url = `${protocol}://${rest}`;
-                }
-                // 如果 URL 格式不符合 protocol://path 的形式，则保持原样，依赖后续 axios 报错
-
-                const data = {
-                    model: this._defaultOption.largeModelName,
-                    messages: [{
-                        role: "user",
-                        content: promptContent
-                    }],
-                    temperature: this._defaultOption.largeModelTemperature || 0.5,
-                    max_tokens: this._defaultOption.largeModelMaxTokens,
-                    stream: this._defaultOption.streaming
-                };
-
-                const headers = {
-                    'Authorization': `Bearer ${this._defaultOption.largeModelKey}`,
-                    'Content-Type': 'application/json'
-                };
-
-                if (this._defaultOption.streaming) {
-                    const response = await axios.post(url, data, {
-                        headers,
-                        responseType: 'stream',
-                        timeout: 50000
-                    });
-
-                    let result = '';
-                    const streamResult = await new Promise<string>((resolve, reject) => {
-                        response.data.on('data', (chunk: Buffer) => {
-                            const lines = chunk.toString().split('\n').filter(line => line.trim() !== '');
-                            for (const line of lines) {
-                                if (line.includes('[DONE]')) continue;
-                                try {
-                                    const jsonStr = line.replace(/^data: /, '').trim();
-                                    if (jsonStr) {
-                                        const json = JSON.parse(jsonStr);
-                                        if (json.choices[0].delta?.content) {
-                                            result += json.choices[0].delta.content;
-                                        }
-                                    }
-                                } catch (e) {
-                                    console.error('解析流式数据错误:', e);
-                                }
-                            }
-                        });
-
-                        response.data.on('end', () => resolve(result.trim()));
-                        response.data.on('error', (err: Error) => reject(err));
-                    });
-
-                    return this.filterThinkingContent(streamResult);
-                } else {
-                    const res = await axios.post(url, data, {
-                        headers,
-                        timeout: 50000
-                    });
-
-                    if (!res.data?.choices?.[0]?.message?.content) {
-                        throw new Error('API响应格式不符合标准');
-                    }
-                    return this.filterThinkingContent(res.data.choices[0].message.content.trim());
-                }
-            } else { // Gemini 模式
-                const genAI = new GoogleGenerativeAI(this._defaultOption.largeModelKey);
-                const model = genAI.getGenerativeModel({
-                    model: this._defaultOption.largeModelName || "gemini-2.0-flash"
-                });
-
-                const result = await model.generateContent({
-                    contents: [{
-                        role: "user",
-                        parts: [{ text: promptContent }]
-                    }]
-                });
-
-                const response = await result.response;
-                if (!response.text()) {
-                    throw new Error('Gemini API 返回内容为空');
-                }
-                return this.filterThinkingContent(response.text().trim());
-            }
         } catch (error: any) {
             window.showErrorMessage(`变量名翻译失败: ${error.message}`);
             throw error;
