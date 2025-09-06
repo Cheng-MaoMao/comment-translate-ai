@@ -94,6 +94,11 @@
 
 ![问题面板翻译](./image/problemTranslateLang.gif)
 
+## 🚧 正在开发
+
+* [ ] 🔍 使用问题面板信息翻译功能时，如果是同语言则不翻译
+* [ ] 🔄 保存多组API并支持切换
+
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
@@ -156,7 +161,11 @@
 ### 1.0.3
 
 - 🔧 修复BUG [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
-上个版本没修好😭
+  上个版本没修好😭
+
+### 1.0.4
+
+- 🔧 优化代码结构
 
 ## 🙏 致谢
 

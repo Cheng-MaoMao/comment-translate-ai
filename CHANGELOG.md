@@ -10,6 +10,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
+- 🔧 优化代码结构
+
+## [1.0.4] - 2025-05-12
+
+### Changed
+
 - 🔧 修复BUG [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
 上个版本没修好😭
 

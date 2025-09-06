@@ -93,6 +93,11 @@ Example: Please act as a translator, check if sentences or phrases are accurate,
 
 ![问题面板翻译](./image/problemTranslateLang.gif)
 
+## 🚧 Under development
+
+* [ ] 🔍 When using the issue panel information translation function, if the language is the same, do not translate.
+* [ ] 🔄 Save multiple API sets and support switching.
+
 ## 🤝 Contributing
 
 Issues and Pull Requests are welcome!
@@ -156,6 +161,10 @@ Issues and Pull Requests are welcome!
 
 - 🔧 Fix bugs [#5](https://github.com/Cheng-MaoMao/comment-translate-ai/issues/5)
 The previous version wasn't fixed properly.😭
+
+### 1.0.4
+
+- 🔧 Optimize code structure
 
 ## 🙏 Acknowledgments
 
