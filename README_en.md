@@ -93,10 +93,12 @@ Example: Please act as a translator, check if sentences or phrases are accurate,
 
 ![问题面板翻译](./image/problemTranslateLang.gif)
 
-## 🚧 Under development
+## 🚧 Under Development
 
-* [ ] 🔍 When using the issue panel information translation function, if the language is the same, do not translate.
-* [ ] 🔄 Save multiple API sets and support switching.
+- [ ] 🔍 When using the issue panel information translation feature, do not translate if the source and target language are the same  
+- [ ] 🔄 Save multiple API configurations and support switching between them  
+
+*My TypeScript skills are weak, and I currently have no clear idea how to implement these two features. I’d appreciate any guidance from experts.*
 
 ## 🤝 Contributing
 
